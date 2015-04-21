@@ -2,6 +2,8 @@ package playfair
 
 class Cipher(val square: Array[Array[Char]]) {
 
+  val cache = collection.mutable.Map[Char, (Int, Int)]()
+  
   def transformPair(pair: (Char, Char)): (Char, Char) = {
     val coords = (this.getCharCoordinate(pair._1), this.getCharCoordinate(pair._2))
     
@@ -13,13 +15,19 @@ class Cipher(val square: Array[Array[Char]]) {
   }
   
   def getCharCoordinate(char: Char): (Int, Int) = {
-    val coord = for{
-      (arr, i) <- square.zipWithIndex
-      (c, j) <- arr.zipWithIndex
-      if( c == char )
-    } yield (i, j)
-    println(coord(0))
-    coord(0);
+    cache get char match {
+      case Some(coord) => coord
+      case None => {
+        val yc = for{
+          (arr, i) <- square.zipWithIndex
+          (c, j) <- arr.zipWithIndex
+          if( c == char )
+        } yield (i, j)
+        val coord = yc(0)
+        cache(char) = coord
+        coord
+      }
+    }
   }
 }
 
