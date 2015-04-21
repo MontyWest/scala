@@ -2,6 +2,8 @@ package playfair
 
 class CipherText(val message: List[(Char, Char)]) {
   
+
+  
   override def toString = {
     message.flatMap {x => Array(x._1, x._2)}
            .grouped(CipherText.WORD_LENGTH).grouped(CipherText.LINE_LENGTH)
@@ -19,10 +21,11 @@ object CipherText {
   val CHAR_SEP = "";
   
   /***
-   * Expects a string containing only lowercase letters
+   * Expects a cipherText (encoded using Playfair) containing only lowercase letters
    */
-  def apply(str: String): CipherText = {
+  def apply(cipherText: String): CipherText = {
     //What if last group only has one element? (Shouldn't occur in coded text)
-    new CipherText(str.toList.grouped(2).map { x => (x(0), x(1)) } toList)
+    new CipherText(cipherText.toList.grouped(2).map { x => (x(0), x(1)) } toList)
   }
+
 }

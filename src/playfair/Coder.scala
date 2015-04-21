@@ -8,7 +8,7 @@ class Coder(val keyword: String) {
 
 object Coder {
   
-  def removePuncutation(str: String): String = {
+  def removePunctuation(str: String): String = {
     str.toLowerCase.replaceAll("[^a-z]", "");
   }
   
