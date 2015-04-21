@@ -1,12 +1,12 @@
 package test.playfair
 
 import org.scalatest.FlatSpec
-import playfair.CipherText
+import playfair.TextPairs
 
-class CipherTextSpec extends FlatSpec {
+class TextPairsSpec extends FlatSpec {
 
   "toString" should "format as rows of 10 words, 5 letters per word, each separated by a space" in {
-    val ct: CipherText = new CipherText(List(
+    val ct: TextPairs = new TextPairs(List(
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
@@ -37,7 +37,7 @@ class CipherTextSpec extends FlatSpec {
   }
   
   "apply" should "take string of lowercase letters and build ciphertext" in {
-      val ct: CipherText = CipherText("fdjsfbjdkgbrjfhiodbjkfdbgfdgjfldgjfkdbgfndbfjdkr")
+      val ct: TextPairs = TextPairs.fromCiphertext("fdjsfbjdkgbrjfhiodbjkfdbgfdgjfldgjfkdbgfndbfjdkr")
       println(ct);
       assert(ct.message.length == 24)
   }
