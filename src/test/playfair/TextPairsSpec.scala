@@ -6,7 +6,7 @@ import playfair.TextPairs
 class TextPairsSpec extends FlatSpec {
 
   "toString" should "format as rows of 10 words, 5 letters per word, each separated by a space" in {
-    val ct: TextPairs = new TextPairs(List(
+    val tp: TextPairs = new TextPairs(List(
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
@@ -23,7 +23,7 @@ class TextPairsSpec extends FlatSpec {
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),
                          ('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c'),('a', 'c')))
     
-    val str: String = ct.toString();
+    val str: String = tp.toString();
     println(str);
     val lineArr: Array[String] = str.split("\n");
     val wordArrs: Array[Array[String]] = lineArr.map { str => str.split(" ") }
@@ -36,10 +36,23 @@ class TextPairsSpec extends FlatSpec {
     }
   }
   
-  "apply" should "take string of lowercase letters and build ciphertext" in {
-      val ct: TextPairs = TextPairs.fromCiphertext("fdjsfbjdkgbrjfhiodbjkfdbgfdgjfldgjfkdbgfndbfjdkr")
-      println(ct);
-      assert(ct.message.length == 24)
+  "fromCiphertext" should "take string of lowercase letters and build ciphertext" in {
+      val tp: TextPairs = TextPairs.fromCiphertext("fdjsfbjdkgbrjfhiodbjkfdbgfdgjfldgjfkdbgfndbfjdkr")
+      println(tp);
+      assert(tp.length == 24)
+  }
+  
+  "fromPlaintext" should "apply playfair variant rules in making text pairs" in {
+    
+    val pt: String = "jimmypossessesjoopxx"
+    val expected: TextPairs = new TextPairs(List(('i', 'x'), ('i', 'm'), ('m', 'y'), ('p', 'o'), ('s', 'x'), ('s', 'e'), ('s', 'x'), ('s', 'e'), ('s', 'i'), ('o', 'x'), ('o', 'p'), ('x', 'q'), ('x', 'z')))
+    
+    val tp: TextPairs = TextPairs.fromPlaintext(pt);
+    
+    assert(tp.length == expected.length)
+    for(i <- 0 until expected.length) {
+      assert(expected(i) == tp(i));
+    }
   }
   
 }

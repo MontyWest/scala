@@ -2,7 +2,9 @@ package playfair
 
 class TextPairs(val message: List[(Char, Char)]) {
   
-
+  def length = message.length
+  
+  def apply(i: Int): (Char, Char) = message(i);
   
   override def toString = {
     message.flatMap {x => Array(x._1, x._2)}
@@ -28,5 +30,8 @@ object TextPairs {
     new TextPairs(ciphertext.toList.grouped(2).map { x => (x(0), x(1)) } toList)
   }
 
+  /***
+   * Expects plaintext (unencoded) containing only lowercase letters
+   */
   def fromPlaintext(plaintext: String): TextPairs = ???
 }
