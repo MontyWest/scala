@@ -48,7 +48,7 @@ class TextPairsSpec extends FlatSpec {
     val expected: TextPairs = new TextPairs(List(('i', 'x'), ('i', 'm'), ('m', 'y'), ('p', 'o'), ('s', 'x'), ('s', 'e'), ('s', 'x'), ('s', 'e'), ('s', 'i'), ('o', 'x'), ('o', 'p'), ('x', 'q'), ('x', 'z')))
     
     val tp: TextPairs = TextPairs.fromPlaintext(pt);
-    
+    println(tp)
     assert(tp.length == expected.length)
     for(i <- 0 until expected.length) {
       assert(expected(i) == tp(i));
