@@ -12,7 +12,7 @@ object Playfair {
   
   val welcome = "Welcome to the PlayFair cipher machine!"
   val goodbye = "Goodbye!\n"
-  val message = "\n\n" +
+  val message = "\n-----------------------------\n" +
                 "\t" + ENCODE_NUM + ". Encode...\n" +
                 "\t" + DECODE_NUM + ". Decode...\n" +
                 "\t" + QUIT_NUM + ". Quit.\n\n" +
@@ -36,13 +36,30 @@ object Playfair {
       } catch {
         case e: NumberFormatException => println("That's not a number!")
       }
-    } while(run)
+    } while(run && {
+        println("\n(Press enter to continue)")
+        StdIn.readLine()
+        true
+      })
       
     println(goodbye)
   }
   
-  def runEncode: Unit = ???
-  def runDecode: Unit = ???
+  def runEncode: Unit = runAction(Coder(getKeywordFromUser).encode, "Encoding...")
+  def runDecode: Unit = runAction(Coder(getKeywordFromUser).decode, "Decoding...")
+  
+  def runAction(action: String => String, actionName: String): Unit = {
+    try {
+      val text: String = getTextFromFile
+      println("File read successful.")
+      println(actionName + "\n")
+      val returnedText: String = action(text)
+      println("Result:")
+      print(returnedText)
+    } catch {
+      case e: Exception => println("Error reading from file: " + e.getMessage)
+    }
+  }
   
   def getKeywordFromUser: String = {
     print("\nEnter keyword: ");
@@ -50,7 +67,7 @@ object Playfair {
     if (keyword == null) "" else keyword
   }
   
-  def getStringFromFile: String = {
+  def getTextFromFile: String = {
     print("\nEnter filename (including .txt extension): ");
     val filename: String = StdIn.readLine()
     val filenameSafe = if (filename == null) "file.txt" else filename
