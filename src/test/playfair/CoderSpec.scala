@@ -11,4 +11,15 @@ class CoderSpec extends FlatSpec{
     assert("wheniwentforthwithharryisaw" == Coder.removePunctuation(preStr))
   }
   
+  "decode" should "apply cipher square to ciphertext to produce (partial) plaintext" in {
+    //TODO add Mocking
+    val coder: Coder =  Coder("PennsylvaniaJ")
+    
+    val ct: String = "gsvqrenkisynisynigqwknsxzt"
+    val expected: String = "iximmyposxsesxsesioxopxqxz"
+    
+    assert(expected == coder.decode(ct))
+    
+  }
+  
 }

@@ -9,11 +9,16 @@ class TextPairs(val underlying: List[(Char, Char)]) {
   
   def toList = underlying
   
+  /**
+   * Returns string representation of text pairs as prescribed by spec:
+   *   Words of 5 letters each, separated with a space
+   *   Lines contain 10 words
+   */
   override def toString = {
     underlying.flatMap {x => Array(x._1, x._2)}
            .grouped(TextPairs.WORD_LENGTH).grouped(TextPairs.LINE_LENGTH)
            .map { (x => x.map { (y => y.mkString(TextPairs.CHAR_SEP)) }
-                                       .mkString(TextPairs.WORD_SEP))}
+                                       .mkString(TextPairs.WORD_SEP)) }
            .mkString(TextPairs.LINE_SEP)
   }  
 
@@ -41,6 +46,7 @@ object TextPairs {
   
   /***
    * Expects a cipherText (encoded using Playfair) containing only lowercase letters
+   * Returns TextPairs of text as is (expects no double letters in pairs etc.)
    */
   def fromCiphertext(ciphertext: String): TextPairs = {
     //What if last group only has one element? (Shouldn't occur in coded text)
@@ -49,6 +55,7 @@ object TextPairs {
 
   /***
    * Expects plaintext (unencoded) containing only lowercase letters (punctuation removed)
+   * Returns TextPairs that obey the pair encoding rules of this Playfair variant
    */
   def fromPlaintext(plaintext: String): TextPairs = {
     
@@ -68,10 +75,10 @@ object TextPairs {
         // If carry letters are different then add to acc, carry empty.
         case ( _ , (Some(c), Some(d))) if c != d => recuHelper(ptList, (c, d) :: acc, (None, None))
         
-        // If ptList still has elements, and there's no carry. Carry head and pass tail
-        case ( ptH :: ptT, (None, None)) => recuHelper(ptT, acc, (Some(ptH), None))
         // If ptList still has elements, and there's a partial carry. Complete carry with head and pass tail
         case ( ptH :: ptT, (Some(c), None)) => recuHelper(ptT, acc, (Some(c), Some(ptH)))
+        // If ptList still has elements, and there's no carry. Carry head and pass tail
+        case ( ptH :: ptT, (None, None)) => recuHelper(ptT, acc, (Some(ptH), None))
         
         // If ptList is empty and there's a partial carry, complete carry with END_BUFFER. (recursed in case c equals END_BUFFER)
         case (Nil, (Some(c), None)) => recuHelper(ptList, acc, (Some(c), Some(END_BUFFER_CHAR)))
