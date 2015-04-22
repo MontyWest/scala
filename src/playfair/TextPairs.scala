@@ -1,21 +1,27 @@
 package playfair
 
-class TextPairs(val message: List[(Char, Char)]) {
+class TextPairs(val underlying: List[(Char, Char)]) {
   
-  def length = message.length
+  def length = underlying.length
+  def apply(i: Int) = underlying(i)
   
-  def apply(i: Int): (Char, Char) = message(i);
+  def toList = underlying
   
   override def toString = {
-    message.flatMap {x => Array(x._1, x._2)}
+    underlying.flatMap {x => Array(x._1, x._2)}
            .grouped(TextPairs.WORD_LENGTH).grouped(TextPairs.LINE_LENGTH)
-    .map { (x => x.map { (y => y.mkString(TextPairs.CHAR_SEP)) }
-           .mkString(TextPairs.WORD_SEP))}
-    .mkString(TextPairs.LINE_SEP)
+           .map { (x => x.map { (y => y.mkString(TextPairs.CHAR_SEP)) }
+                                       .mkString(TextPairs.WORD_SEP))}
+           .mkString(TextPairs.LINE_SEP)
   }  
+
 }
 
+
+
 object TextPairs {
+	implicit def tpList(self: List[(Char, Char)]): TextPairs = new TextPairs(self)
+
   val WORD_LENGTH = 5;
   val LINE_LENGTH = 10;
   val LINE_SEP = "\n";
@@ -27,7 +33,7 @@ object TextPairs {
    */
   def fromCiphertext(ciphertext: String): TextPairs = {
     //What if last group only has one element? (Shouldn't occur in coded text)
-    new TextPairs(ciphertext.toList.grouped(2).map { x => (x(0), x(1)) } toList)
+    ciphertext.toList.grouped(2).map { x => (x(0), x(1)) } toList
   }
 
   /***
