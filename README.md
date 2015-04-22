@@ -11,9 +11,9 @@ Running (using sbt):
 - Add text files to be encoded/decoded (in this directory)</li>
 - Run:
 ```
-sbt
->compile
->run
+$ sbt
+> compile
+> run
 ```
 - Follow instructions.</li>
 
