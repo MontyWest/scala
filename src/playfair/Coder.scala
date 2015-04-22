@@ -2,17 +2,28 @@ package playfair
 
 class Coder(val keyword: String) {
   private var optCipher: Option[Cipher] = None;
-  val cipher = optCipher.getOrElse(createCipher)
+  val cipher: Cipher = optCipher.getOrElse(createCipher)
+  
   /**
    * Creates the cipher from the keyword
    */
-  def createCipher() {
-    optCipher = Some(Cipher(Coder.removePunctuation(keyword)))
+  def createCipher(): Cipher = {
+    val c = Cipher(Coder.removePunctuation(keyword))
+    optCipher = Some(c)
+    c
   }
   
-  def decode(ciphertext: String): String = ???
+  def decode(ciphertext: String): String = {
+    val cipherPairs: TextPairs = TextPairs.fromCiphertext(Coder.removePunctuation(ciphertext));
+    val plainishPairs: TextPairs = cipherPairs.toList.map(cipher.decodePair)
+    plainishPairs.toString()
+  }
   
-  def encode(plaintext: String): String = ???
+  def encode(plaintext: String): String = {
+    val plainPairs: TextPairs = TextPairs.fromPlaintext(Coder.removePunctuation(plaintext));
+    val cipherPairs: TextPairs = plainPairs.toList.map(cipher.encodePair)
+    cipherPairs.toString()
+  }
 }
 
 object Coder {
